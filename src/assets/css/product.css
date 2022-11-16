@@ -1,0 +1,68 @@
+
+.lt_icon{
+    height: 100%;
+    font-size: 2rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    z-index: 1;
+    background-color: inherit;
+}
+
+.lt_icon:hover{
+    color: white
+}
+
+
+.product_input{
+    height: 100%;
+    width: 100%;
+    padding: 10px 60px 10px 20px;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+    color: var(--txt-color);
+    background-color: var(--main-bg);
+}
+
+
+.product_input > input {
+    height: 100%;
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+    color: var(--txt-color);
+    background-color: var(--main-bg);
+    border-color: #2d2d2d;
+    
+}
+
+
+.product_label{
+    padding: 10px 60px 0px 20px;
+}
+
+
+.product_input > textarea {
+    height: 100%;
+    width: 100%;
+    padding: 10px 20px 10px 20px;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+    color: var(--txt-color);
+    background-color: var(--main-bg);
+    border-color: #2d2d2d;
+}
+
+.product_input > select {
+    height: 100%;
+    width: 100%;
+    padding: 10px 20px 10px 15px;
+    font-size: 1rem;
+    border-radius: var(--border-radius);
+    color: var(--txt-color);
+    background-color: var(--main-bg);
+    border-color: #2d2d2d;
+    align-items: center;
+}
+
