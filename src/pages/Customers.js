@@ -27,28 +27,12 @@ function renderBody(item, index){
 }
 
 
-function Customers() {
+const Customers=()=> {
   return (
     <div className=''>
       <h2 className="page-header">
         customers
       </h2>
-
-      <div className='row'>
-        <div className='col-12'>
-          <div className='card'>
-          <div className='card__header'>
-            <h3>Customer List</h3>
-          </div>
-            <div className='card__body'>
-              <input></input>
-              <input></input>
-              <input></input>
-              <input></input>
-            </div>
-          </div>
-        </div>
-      </div>
 
 
       <div className="row">
@@ -56,7 +40,7 @@ function Customers() {
           <div className="card">
             <div className="card__body">
               <Table
-                limit='10'
+                limit = "10"
                 headData={customerTableHead}
                 renderHead={(item, index) => renderHead(item, index)}
                 bodyData={customerList}
@@ -66,6 +50,7 @@ function Customers() {
             </div>
           </div>
         </div>
+        
       </div>
     </div>
   )

@@ -4,11 +4,10 @@ import { Link } from 'react-router-dom'
 import Dropdown from '../dropdown/Dropdown'
 import notifications from '../../assets/JsonData/notification.json'
 import user_menu from '../../assets/JsonData/user_menus.json'
-import user_image from '../../assets/images/tuat.png'
 
 const curr_user = {
     display_name: 'Tuat Tran',
-    image: user_image
+    image: ''
 }
 
 function renderNotificationItem(item, index) {

@@ -64,5 +64,74 @@
     background-color: var(--main-bg);
     border-color: #2d2d2d;
     align-items: center;
+    
 }
 
+.example h2, .example p{
+    margin-bottom: 20px;
+
+}
+.price-example{
+    color: red;
+}
+
+.example p span{
+    font-weight: bold;
+    font-size:x-large;
+}
+
+.example button {
+    padding: 10px 15px;
+    color: var(--txt-white);
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+    font-weight: bold;
+    font-size: large;
+}
+
+.btn-them{
+    background-color: var(--main-color-red);
+}
+
+.btn-mua{
+    background-color: var(--main-color-green);
+}
+
+.btn-text{
+    font-weight: bold;
+    font-size:large;
+    text-align: center;
+}
+
+.btn-add{
+    font-weight: bold;
+    font-size:x-large;
+    text-align: center;
+    background-color: var(--main-color-blue);
+    padding: 8px 10px;
+    color: var(--txt-white);
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+.btn-del{
+    font-weight: bold;
+    font-size:x-large;
+    text-align: center;
+    background-color: var(--main-color-red);
+    padding: 8px 10px;
+    color: var(--txt-white);
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}
+
+.btn-add-new{
+    font-weight: bold;
+    font-size:x-large;
+    text-align: center;
+    background-color: var(--main-color-green);
+    padding: 8px 10px;
+    color: var(--txt-white);
+    border-radius: 10px;
+    box-shadow: var(--box-shadow);
+}

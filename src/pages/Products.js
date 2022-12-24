@@ -1,101 +1,80 @@
-import React, { Component, useState } from 'react'
-import { Link } from 'react-router-dom'
-import Badge from '../components/badge/Badge'
-import Table from '../components/table/Table'
+import React, { useState, useEffect } from 'react'
 import "../assets/css/product.css"
-import axios from 'axios'
-
-const renderOrderHead = (item, index) => (
-    <th key={index}>{item}</th>
-)
-
-const orderStatus = {
-    "shipping": "primary",
-    "pending": "warning",
-    "paid": "success",
-    "refund": "danger"
-}
-
-
-const renderOrderBody = (item, index) => (
-    <tr key={index}>
-        <td>{item.id}</td>
-        <td>{item.name}</td>
-        <td>{item.price}</td>
-        <td>{item.date}</td>
-        <td>{item.category}</td>
-        <td>
-            <Badge type={orderStatus[item.status]} content={item.status} />
-        </td>
-        <td>
-            <button className='lt_icon edit'>
-                <i class='bx bx-edit' ></i>
-            </button>
-        </td>
-        <td>
-            <button className='lt_icon trash'>
-                <i class='bx bx-trash' ></i>
-            </button>
-        </td>
-    </tr>
-)
-
-
-const latestOrders = {
-    header: [
-        "product id",
-        "Name",
-        "total price",
-        "date",
-        "category",
-        "status",
-        "edit",
-        "delete"
-    ],
-    body: [
-    ]
-}
-
+import { createProduct } from "../services/product.service"
+import Badge from '../components/badge/Badge';
+import Editor from '../components/editor/Editor';
 function Products() {
+    const [value, setValue] = useState("")
 
+    const [inputData, setInputData] = useState({
+        name: "Tên sản phẩm",
+        price: "Liên Hệ",
+        status: "",
+        type: "Loại Sản Phẩm",
+        describe: "Mô tả sản phẩm ở đây",
+        quantity: "Còn Hàng",
+        img: "",
+        detail: "",
 
-    const [inputText, setInputText] = useState({
-        name: "",
-        price:"",
-        status:"",
-        time:"",
-        category:"",
-        describe:"",
-        img:""
     });
 
+    const [flag, setFlag] = useState(false)
+    const [posts, setPosts] = useState([])
 
-    const [a,setA] = useState({
-        product: [],
-        name: "",
-        price:"",
-        status:"",
-        time:"",
-        category:"",
-        describe:"",
-        img:"",
-        id:""
-    })
-
-
-    componentDidMount()
+    const orderStatus = {
+        "Còn Hàng": "success",
+        "Hết Hàng": "danger",
+        "Hàng Sắp Về": "primary",
+        "refund": "danger"
+    }
 
 
     function handleChange(event) {
         const { name, value } = event.target;
 
-        setInputText(prevValue => {
+        setInputData(prevValue => {
             return {
                 ...prevValue,
-                [name]: value
+                [name]: (name === 'price' ? value + " đ" : value)
             };
         });
+
     }
+
+    function html_to_string() {
+        inputData.detail = String(value)
+    }
+
+
+    function handleClick() {
+        setFlag(true)
+        html_to_string()
+        setPosts(inputData)
+        alert("Thêm sản phẩm thành công! ")
+        setInputData({
+            name: "Tên sản phẩm",
+            price: "Liên Hệ",
+            status: "",
+            type: "Loại Sản Phẩm",
+            describe: "Mô tả sản phẩm ở đây",
+            quantity: "Còn Hàng",
+            img: "",
+            detail: "",
+
+        })
+        setValue("")
+
+    }
+
+
+    useEffect(() => {
+        const fetchData = async () => {
+            flag &&
+                await createProduct(posts)
+
+        };
+        fetchData();
+    }, [posts, flag]);
 
 
     return (
@@ -103,12 +82,22 @@ function Products() {
             <h2 className="page-header">
                 Products
             </h2>
-
             <div className='row'>
-                <div className='col-8'>
+                <div className='col-6'>
                     <div className='card'>
                         <div className='card__header'>
-                            <h3>Add New Product</h3>
+                            <div className='row'>
+
+                                <div className='col-7'>
+                                    <h3>Add Product</h3>
+                                </div>
+                                <div className='col-5'>
+                                    <button className='btn-add-new' type='submit'>
+                                        Create new product
+                                    </button>
+                                </div>
+                            </div>
+
                         </div>
                         <div className='card__body'>
                             <div>
@@ -118,6 +107,7 @@ function Products() {
                                         placeholder='Product Name...'
                                         name="name"
                                         onChange={handleChange}
+
                                     />
                                 </div>
                             </div>
@@ -131,14 +121,17 @@ function Products() {
                                                 name="price"
                                                 onChange={handleChange}
                                             />
+                                            {/* <select className='' onChange={handleChange} name="price">
+                                                <option value={"Liên Hệ"}>Liên Hệ</option>
+                                            </select> */}
                                         </div>
                                     </div>
                                 </div>
                                 <div className='col-7'>
                                     <div>
-                                        <h4 className='product_label'>Status</h4>
+                                        <h4 className='product_label'>Quantity</h4>
                                         <div className='product_input'>
-                                            <select className='' onChange={handleChange} name="status">
+                                            <select className='' onChange={handleChange} name="quantity">
                                                 <option value={"Còn Hàng"}>Còn Hàng</option>
                                                 <option value={"Hết Hàng"}>Hết Hàng</option>
                                                 <option value={"Hàng Sắp Về"}>Hàng Sắp Về</option>
@@ -151,22 +144,22 @@ function Products() {
                             <div className='row'>
                                 <div className='col-5'>
                                     <div>
-                                        <h4 className='product_label'>Date</h4>
+                                        <h4 className='product_label'>Status</h4>
                                         <div className='product_input'>
-                                            <input type="date"
-                                                placeholder='dd/mm/yyyy'
-                                                name="time"
+                                            <input type="status"
+                                                placeholder='status'
+                                                name="status"
                                                 onChange={handleChange} />
                                         </div>
                                     </div>
                                 </div>
                                 <div className='col-7'>
                                     <div>
-                                        <h4 className='product_label'>Category</h4>
+                                        <h4 className='product_label'>Type</h4>
                                         <div className='product_input'>
                                             <input type="text"
-                                                placeholder='Category Name...'
-                                                name="category"
+                                                placeholder='Type Name...'
+                                                name="type"
                                                 onChange={handleChange}
                                             />
                                         </div>
@@ -175,12 +168,12 @@ function Products() {
                             </div>
                             <div>
                                 <h4 className='product_label'>Image</h4>
-                                <div className='product_input '>         
-                                    <input className='input_file' 
-                                    type="file" 
-                                    name='img' 
-                                    accept='image/*'
-                                    onChange={handleChange}
+                                <div className='product_input '>
+                                    <input className='input_file'
+                                        type="file"
+                                        name='img'
+                                        accept='image/*'
+                                        onChange={handleChange}
                                     />
                                 </div>
                             </div>
@@ -193,55 +186,67 @@ function Products() {
                                         onChange={handleChange} />
                                 </div>
                             </div>
+
                         </div>
                     </div>
+                    <div>
+                        <h4 className='product_label'>Product Detail</h4>
+                        <Editor
+                            setValue={setValue}
+                        />
+                        <br />
+                    </div>
                 </div>
-                <div className='col-4'>
+                <div className='col-6'>
                     <div className='card'>
                         <div className='card__header'>
-                            <h3>Sample Product</h3>
+                            <p>Trang Chủ {'>>'} Danh Mục Sản Phẩm {'>>'} {inputData.type} </p>
                         </div>
                         <div className='card__body'>
-                            <div>
-                                <h3>{inputText.name}</h3>
-                                <p>{inputText.price}</p>
-                                <p>{inputText.status}</p>
-                                <p>{inputText.time}</p>
-                                <p>{inputText.category}</p>
-                                <img src={inputText.img} alt="" height="50" width="50"></img>
-                                <p>{inputText.describe}</p>
+                            <div className='row'>
+                                <div className='col-5'>
+                                    <img src={inputData.img} alt="" height="auto" width="auto"></img>
+                                </div>
+                                <div className='col-7'>
+                                    <div className='example'>
+                                        <h2>{inputData.name}</h2>
+                                        {/* Giá: <span>{inputData.price}</span> đ */}
+                                        <p className='price-example'>Giá: <span>{inputData.price}</span> </p>
+                                        <p className='quantity-example'>Số Lượng: <Badge type={orderStatus[inputData.quantity]} content={inputData.quantity} /></p>
+                                        <p className='describe-example'>{inputData.describe}</p>
+                                        <div className='row'>
+                                            <div className='col-6'><button className='btn-them'>Thêm vào giỏ hàng</button></div>
+                                            <div className='col'><span className='btn-text'>Hoặc</span></div>
+                                            <div className='col-4'><button className='btn-mua'>Mua ngay</button></div>
+                                        </div>
+                                    </div>
+                                </div>
                             </div>
-                            <div>
-                                <button className='' type='submit'>
-                                    Add
+                        </div>
+                    </div>
+                    <div className='card'>
+                        <div className='card__header'>
+                            <p>Chi Tiết </p>
+                            <div dangerouslySetInnerHTML={{ __html: value }}></div>
+                        </div>
+                    </div>
+                    <div className='card'>
+                        <div className='row'>
+                            <div className='col-4'>
+                                <button className='btn-add' type='submit' onClick={handleClick}>
+                                    Add product
+                                </button>
+                            </div>
+                            <div className='col-3'>
+                                <button className='btn-del' type='submit'>
+                                    Delete
                                 </button>
                             </div>
                         </div>
                     </div>
+
                 </div>
             </div>
-
-            <div className='row'>
-                <div className="col-12">
-                    <div className="card">
-                        <div className="card__header">
-                            <h3>latest Products</h3>
-                        </div>
-                        <div className="card__body">
-                            <Table
-                                headData={latestOrders.header}
-                                renderHead={(item, index) => renderOrderHead(item, index)}
-                                bodyData={latestOrders.body}
-                                renderBody={(item, index) => renderOrderBody(item, index)}
-                            />
-                        </div>
-                        <div className="card__footer">
-                            <Link to='/'>view all</Link>
-                        </div>
-                    </div>
-                </div>
-            </div>
-
         </div>
     )
 }
